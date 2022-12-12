@@ -83,6 +83,7 @@ resource "docker_volume" "home_volume" {
 resource "docker_container" "workspace" {
   count = data.coder_workspace.me.start_count
   image = "codercom/code-server:latest"
+  memory = 512
   # Uses lower() to avoid Docker restriction on container names.
   name = "coder-${data.coder_workspace.me.owner}-${lower(data.coder_workspace.me.name)}"
   # Hostname makes the shell more user friendly: coder@my-workspace:~$
