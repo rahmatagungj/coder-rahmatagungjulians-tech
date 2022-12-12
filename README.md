@@ -39,6 +39,8 @@ sudo systemctl restart coder
 ```
 
 ### Install Caddy Server
+
+Reference: [Caddy in Coder](https://github.com/coder/coder/tree/main/examples/web-server/caddy)
 ```
 sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
