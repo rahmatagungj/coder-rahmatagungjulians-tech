@@ -37,3 +37,42 @@ journalctl -u coder.service -b
 ```
 sudo systemctl restart coder
 ```
+
+## Setup Caddy
+
+Install Caddy Server
+```
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install caddy
+```
+
+Update config `vim /etc/caddy/Caddyfile` :
+```
+coder.rahmatagungjulians.tech, *.coder.rahmatagungjulians.tech {
+        reverse_proxy localhost:3000
+        tls {
+            on_demand
+            issuer acme {
+              email rahmatagungj@gmail.com
+            }
+          }
+}
+```
+
+- Use systemd to start Caddy now and on reboot
+```
+sudo systemctl enable --now caddy
+```
+
+- View the logs to ensure a successful start
+```
+journalctl -u caddy.service -b
+```
+
+- To restart Caddy after applying system changes
+```
+sudo systemctl restart caddy
+```
