@@ -74,3 +74,8 @@ journalctl -u caddy.service -b
 ```
 sudo systemctl restart caddy
 ```
+
+
+## Install Templates
+
+Select template in `/templates` folder and run `coder templates create`
