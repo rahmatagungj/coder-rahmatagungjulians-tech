@@ -169,7 +169,6 @@ resource "docker_image" "coder_image" {
 resource "docker_container" "workspace" {
   count = data.coder_workspace.me.start_count
   image = docker_image.coder_image.latest
-  memory = 1028
 
   # Uses lower() to avoid Docker restriction on container names.
   name = "coder-${data.coder_workspace.me.owner}-${lower(data.coder_workspace.me.name)}"
