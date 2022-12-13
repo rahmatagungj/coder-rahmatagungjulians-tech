@@ -1,25 +1,9 @@
 FROM codercom/enterprise-vnc:ubuntu
 
-USER root
+USER 0
 
 ENV SHELL=/bin/bash
 ENV DEBIAN_FRONTEND="noninteractive"
-RUN apt update -y && \
-    apt install -y apt-transport-https software-properties-common wget
-
-
-# Git
-RUN add-apt-repository ppa:git-core/ppa -y
-
-RUN apt update -y
-
-# Basic tools
-RUN apt install -y sudo doas
-
-# Create coder user
-RUN useradd coder --create-home --shell=/bin/bash --uid=1000 --user-group && \
-    echo "coder ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers.d/nopasswd         && \
-    echo "permit nopass coder as root" >> /etc/doas.conf
 
 
 # nvm + node + pnpm
