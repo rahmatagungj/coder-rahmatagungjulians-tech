@@ -52,12 +52,6 @@ resource "coder_app" "code-server" {
   icon         = "/icon/code.svg"
   subdomain    = true
   share        = "public"
-
-  healthcheck {
-    url       = "http://localhost:8080/healthz"
-    interval  = 3
-    threshold = 10
-  }
 }
 
 resource "docker_volume" "home_volume" {
