@@ -13,24 +13,6 @@ terraform {
 
 
 # Admin parameters
-variable "step1_docker_host_warning" {
-  description = <<-EOF
-  Is Docker running on the Coder host?
-
-  This template will use the Docker socket present on
-  the Coder host, which is not necessarily your local machine.
-
-  You can specify a different host in the template file and
-  surpress this warning.
-  EOF
-  validation {
-    condition     = contains(["Continue using /var/run/docker.sock on the Coder host"], var.step1_docker_host_warning)
-    error_message = "Cancelling template create."
-  }
-
-  sensitive = true
-}
-
 variable "Architecture" {
   description = "arch: What architecture is your Docker host on?"
   default = "amd64"
@@ -51,7 +33,6 @@ variable "OS" {
   }
 }
 
-# https://ppswi.us/noVNC/app/images/icons/novnc-192x192.png
 
 provider "docker" {
   host = var.OS == "Windows" ? "npipe:////.//pipe//docker_engine" : "unix:///var/run/docker.sock"
@@ -69,7 +50,7 @@ resource "coder_app" "novnc" {
   slug          = "vnc"
   display_name  = "noVNC Desktop"
   icon          = "https://ppswi.us/noVNC/app/images/icons/novnc-192x192.png"
-  url           = "http://localhost:6081"
+  url           = "http://localhost:6081?autoconnect=1&resize=scale"
   share         = "owner"
   subdomain    = true
 }
@@ -80,7 +61,7 @@ resource "coder_app" "code-server" {
   slug          = "code"
   display_name  = "Code Editor"
   icon          = "https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_vscode_icon_130084.png"
-  url           = "http://localhost:13337"
+  url           = "http://localhost:13337/?folder=/home/coder/projects"
   share         = "owner"
   subdomain     = true
 }
@@ -182,22 +163,10 @@ resource "docker_container" "workspace" {
     host = "host.docker.internal"
     ip   = "host-gateway"
   }
-  # users data directory
-  volumes {
-    container_path = "/home/coder/data/"
-    host_path      = "/data/${data.coder_workspace.me.owner}/"
-    read_only      = false
-  }
   # users home directory
   volumes {
     container_path = "/home/coder"
     volume_name    = docker_volume.home_volume.name
-    read_only      = false
-  }
-  # shared data directory
-  volumes {
-    container_path = "/home/coder/share"
-    host_path      = "/data/share/"
     read_only      = false
   }
 

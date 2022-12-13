@@ -95,22 +95,10 @@ resource "docker_container" "workspace" {
     host = "host.docker.internal"
     ip   = "host-gateway"
   }
- # users data directory
-  volumes {
-    container_path = "/home/coder/data/"
-    host_path      = "/data/${data.coder_workspace.me.owner}/"
-    read_only      = false
-  }
   # users home directory
   volumes {
     container_path = "/home/coder"
     volume_name    = docker_volume.home_volume.name
-    read_only      = false
-  }
-  # shared data directory
-  volumes {
-    container_path = "/home/coder/share"
-    host_path      = "/data/share/"
     read_only      = false
   }
   # Add labels in Docker to keep track of orphan resources.
