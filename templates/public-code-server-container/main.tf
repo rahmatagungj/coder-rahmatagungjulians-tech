@@ -23,7 +23,14 @@ data "coder_workspace" "me" {
 resource "coder_agent" "main" {
   arch           = data.coder_provisioner.me.arch
   os             = "linux"
-  startup_script = "code-server --auth password"
+  startup_script = <<EOT
+#!/bin/bash
+set -euo pipefail
+mkdir -p /home/coder/projects
+
+# start code-server
+code-server --auth password
+  EOT
 
   # These environment variables allow you to make Git commits right away after creating a
   # workspace. Note that they take precedence over configuration defined in ~/.gitconfig!
@@ -41,7 +48,7 @@ resource "coder_app" "code-server" {
   agent_id     = coder_agent.main.id
   slug         = "code"
   display_name = "Code Editor"
-  url          = "http://localhost:8080/?folder=/home/coder"
+  url          = "http://localhost:8080/?folder=/home/coder/projects"
   icon         = "/icon/code.svg"
   subdomain    = true
   share        = "public"
