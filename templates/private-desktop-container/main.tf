@@ -50,7 +50,7 @@ resource "coder_app" "novnc" {
   slug          = "vnc"
   display_name  = "noVNC Desktop"
   icon          = "https://ppswi.us/noVNC/app/images/icons/novnc-192x192.png"
-  url           = "http://localhost:6081?autoconnect=1&resize=scale"
+  url           = "http://localhost:6081"
   share         = "owner"
   subdomain    = true
 }
